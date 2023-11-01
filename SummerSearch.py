@@ -56,7 +56,7 @@ class summerSearch:
                 raise Exception("Failed to retrieve a paragraph of sufficient length.")
             else:
                 # Recursively call the search method with the same query but increment the execution count
-                self.search(search_query=self.searchQuery, get_links=execution_count)
+                self.search(search_query=self.searchQuery, get_links=execution_count+1)
                 execution_count += 1
 
         return self.rawParagraph
