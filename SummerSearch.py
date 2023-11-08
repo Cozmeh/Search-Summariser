@@ -31,13 +31,16 @@ class summerSearch:
             raise Exception(f"Failed to retrieve search results. \nStatus code: {response.status_code}")
 
     # Extracts the raw text from the links
-    def __extract(self,accuracy):
-        index = random.randint(0, accuracy)
-        source = self.results[index:index+1]
+    def __extract(self,filter,filter_value):
+        if filter == "accuracy":
+            index = random.randint(0, filter_value)
+            source = self.results[index:index+1][0]
+        else:
+            source = self.results[filter_value]
         if self.results:
-            response = requests.get(url=source[0], headers=self.headers)
+            response = requests.get(url=source, headers=self.headers)
             parsed_text = BeautifulSoup(response.text, "html.parser").find_all("p")
-            self.results[0] = source[0]
+            self.results[0] = source
             for text in parsed_text:
                 if text.get_text() != None and len(text.get_text()) > 250:
                     # Check if the text has enough content based on length and whitespace ratio
@@ -48,19 +51,21 @@ class summerSearch:
             raise Exception("Search results not found!")
 
     # Performs a search and returns the raw paragraph
-    def search(self, search_query, accuracy=3): 
+    def search(self, search_query, filter="accuracy", filter_value=2):
+        if filter not in ["accuracy", "fixed_index"]:
+            raise ValueError("Invalid filter value. Use 'accuracy' or 'fixed_index'.") 
         if search_query == "":
             raise Exception(f"Search query not found! \nProvided search_query:{search_query}")
-        if accuracy not in range(1,6):
-            raise Exception(f"Accuracy must be between 1 and 5. \nProvided accuracy:{accuracy}")
+        if filter_value not in range(1,6):
+            raise Exception(f"Accuracy must be between 1 and 5. \nProvided accuracy:{filter_value}")
         
         self.raw_paragraph = ""  
         self.search_query = search_query  
         self.__get_links() 
-        self.__extract(accuracy)
+        self.__extract(filter = filter, filter_value = filter_value)
         # If the raw_paragraph is empty or is less than 300 characters, try again with a lower accuracy(+1)
         if self.raw_paragraph == "" and len(self.raw_paragraph) < 300:
-            self.__extract(accuracy+1)
+            self.__extract(filter = filter ,filter_value = filter_value+1)
 
         return self.raw_paragraph
 
@@ -75,6 +80,7 @@ class summerSearch:
                 self.output["summary"] = summary
                 self.output["reference"] = self.results[0]
                 self.output["learn_more"] = random.choices(self.results, k=2)
+                self.output["all_links"] = self.results[1:]
             else:
                 self.output["summary"] = summary
             return self.output

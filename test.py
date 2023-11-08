@@ -5,15 +5,16 @@ print("Ready to search and summarize!")
 # Perform a search
 while True:
     search_query = input("Enter a search query: ")
-    raw_paragraph = searcher.search(search_query=search_query,accuracy=1)
+    raw_paragraph = searcher.search(search_query=search_query,filter="fixed_index",filter_value=1)
     print("Generating summary...")
     # Summarize the content
     model = "t5-small"
     result = searcher.summarize(raw_paragraph, model)
 
     # Print the results
-    print("Search Query:", result["search_query"])
-    print("Summary:", result["summary"])
-    print("Reference Link:", result["reference"])
-    print("Learn More Links:", result["learn_more"])
+    print("\nSearch Query:", result["search_query"])
+    print("\nSummary:", result["summary"])
+    print("\nReference Link:", result["reference"])
+    print("\nLearn More Links:", result["learn_more"])
+    print("\nAdditional Links:", result["all_links"])
     
