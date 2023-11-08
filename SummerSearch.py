@@ -74,10 +74,10 @@ class summerSearch:
         if len(raw_paragraph) > 300:
             summarizer = pipeline("summarization", model=model)
             # Use a summarization model to generate a summary
-            summary = summarizer(raw_paragraph, truncation=True)[0]["summary_text"]
+            summary = str(summarizer(raw_paragraph, truncation=True)[0]["summary_text"])
             if self.results:
                 self.output["search_query"] = self.search_query
-                self.output["summary"] = summary
+                self.output["summary"] = summary[0].capitalize() + summary[1:]
                 self.output["reference"] = self.results[0]
                 self.output["learn_more"] = random.choices(self.results, k=2)
                 self.output["all_links"] = self.results[1:]
