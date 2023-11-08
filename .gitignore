@@ -1,0 +1,8 @@
+
+helper.txt
+.vscode/settings.json
+__pycache__/SummerSearch.cpython-311.pyc
+__pycache__/SearchSummariser.cpython-311.pyc
+dist/
+build/
+*.egg-info/

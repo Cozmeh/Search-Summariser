@@ -64,14 +64,14 @@ class summerSearch:
         self.__get_links() 
         self.__extract(filter = filter, filter_value = filter_value)
         # If the raw_paragraph is empty or is less than 300 characters, try again with a lower accuracy(+1)
-        if self.raw_paragraph == "" and len(self.raw_paragraph) < 300:
+        if self.raw_paragraph == "" and len(self.raw_paragraph) < 200:
             self.__extract(filter = filter ,filter_value = filter_value+1)
 
         return self.raw_paragraph
 
     # Summarizes the raw paragraph
     def summarize(self, raw_paragraph, model):
-        if len(raw_paragraph) > 300:
+        if len(raw_paragraph) > 200:
             summarizer = pipeline("summarization", model=model)
             # Use a summarization model to generate a summary
             summary = str(summarizer(raw_paragraph, truncation=True)[0]["summary_text"])
