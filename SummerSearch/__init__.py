@@ -1,1 +1,1 @@
-from SummerSearch import summerSearch
+from SummerSearch.SummerSearch import summerSearch
